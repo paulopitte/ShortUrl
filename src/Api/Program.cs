@@ -26,7 +26,8 @@ try
     builder.Host.UseSerilog((context, services, configuration) => configuration
         .ReadFrom.Configuration(context.Configuration)
         .ReadFrom.Services(services)
-        .Enrich.FromLogContext());
+        .Enrich.FromLogContext(),
+        preserveStaticLogger: true);
 
     // Configuração de opções (ShortUrlOptions) com suporte a appsettings, env vars e user-secrets
     builder.Services.Configure<ShortUrlOptions>(
@@ -83,6 +84,7 @@ try
     }));
 
     app.MapEndpointGroups();
+    app.MapRedirectEndpoints();
 
     app.Run();
 }
