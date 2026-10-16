@@ -2,11 +2,13 @@ using System.Net;
 using System.Net.Sockets;
 using FluentValidation;
 using ShortUrl.Application.ShortLinks.Commands.CreateShortLink;
+using ShortUrl.Domain.Entities;
 
 namespace ShortUrl.Application.Validators;
 
 /// <summary>
-/// Validador FluentValidation para <see cref="CreateShortLinkCommand"/> garantindo URL pública válida (RN-02 / FR-002).
+/// Validador FluentValidation para <see cref="CreateShortLinkCommand"/> garantindo URL pública válida (RN-02 / FR-002)
+/// e data de expiração futura em UTC (FR-005 / RN-03).
 /// </summary>
 public sealed class CreateShortLinkCommandValidator : AbstractValidator<CreateShortLinkCommand>
 {
@@ -23,6 +25,22 @@ public sealed class CreateShortLinkCommandValidator : AbstractValidator<CreateSh
             .WithMessage("A URL de destino deve utilizar o protocolo http ou https.")
             .Must(HasValidPublicHost)
             .WithMessage("A URL de destino deve apontar para um endereço público válido (hosts locais ou IPs privados não são permitidos).");
+
+        RuleFor(x => x.ExpiresAtUtc)
+            .Must(BeInTheFutureUtc)
+            .When(x => x.ExpiresAtUtc.HasValue)
+            .WithMessage("A data de expiração deve ser uma data futura em UTC.");
+    }
+
+    private static bool BeInTheFutureUtc(DateTime? expiresAtUtc)
+    {
+        if (!expiresAtUtc.HasValue)
+        {
+            return true;
+        }
+
+        var normalized = ShortLink.NormalizeExpirationDate(expiresAtUtc.Value);
+        return normalized > DateTime.UtcNow;
     }
 
     private static bool HasValidHttpOrHttpsScheme(string? url)

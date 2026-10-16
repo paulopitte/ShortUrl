@@ -34,5 +34,50 @@ public class ShortLink
     /// Contador inteiro monotônico crescente de redirecionamentos válidos realizados.
     /// </summary>
     public long AccessCount { get; set; }
+
+    /// <summary>
+    /// Calcula a data de expiração padrão (10 anos após a data de criação em UTC).
+    /// </summary>
+    /// <param name="createdAtUtc">Instante de criação do link em UTC.</param>
+    /// <returns>Instante limite de validade padrão em UTC.</returns>
+    public static DateTime CalculateDefaultExpiration(DateTime createdAtUtc)
+    {
+        var utc = EnsureUtc(createdAtUtc);
+        return utc.AddYears(10);
+    }
+
+    /// <summary>
+    /// Normaliza uma data de expiração para o final do dia em UTC (23:59:59.9999999Z).
+    /// </summary>
+    /// <param name="dateTime">Data a ser normalizada.</param>
+    /// <returns>Instante correspondente ao final do dia em UTC.</returns>
+    public static DateTime NormalizeExpirationDate(DateTime dateTime)
+    {
+        var utc = EnsureUtc(dateTime);
+        return new DateTime(utc.Year, utc.Month, utc.Day, 23, 59, 59, DateTimeKind.Utc)
+            .AddTicks(9_999_999);
+    }
+
+    /// <summary>
+    /// Verifica se o link já expirou em relação ao instante UTC fornecido.
+    /// Um link é considerado ativo se <paramref name="nowUtc"/> for menor ou igual a <see cref="ExpiresAtUtc"/>.
+    /// </summary>
+    /// <param name="nowUtc">Instante atual em UTC.</param>
+    /// <returns><c>true</c> se expirado; caso contrário, <c>false</c>.</returns>
+    public bool IsExpired(DateTime nowUtc)
+    {
+        var utc = EnsureUtc(nowUtc);
+        return utc > ExpiresAtUtc;
+    }
+
+    private static DateTime EnsureUtc(DateTime dateTime)
+    {
+        return dateTime.Kind switch
+        {
+            DateTimeKind.Utc => dateTime,
+            DateTimeKind.Local => dateTime.ToUniversalTime(),
+            _ => DateTime.SpecifyKind(dateTime, DateTimeKind.Utc)
+        };
+    }
 }
 

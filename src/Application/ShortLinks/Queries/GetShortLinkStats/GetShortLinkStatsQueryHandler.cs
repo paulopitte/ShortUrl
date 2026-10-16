@@ -27,7 +27,7 @@ public sealed class GetShortLinkStatsQueryHandler(
         }
 
         var nowUtc = DateTime.UtcNow;
-        var isExpired = nowUtc > shortLink.ExpiresAtUtc;
+        var isExpired = shortLink.IsExpired(nowUtc);
 
         return new ShortLinkStatsDto(
             shortLink.Code,

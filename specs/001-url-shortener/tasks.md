@@ -119,15 +119,15 @@
 
 ### Tests for User Story 3 ⚠️
 
-- [ ] T038 [P] [US3] Unit tests for expiration domain logic and validation asserting default 10-year expiration, end-of-day UTC normalization (`23:59:59.9999999Z`), and rejection of past dates in `tests/Domain.UnitTests/Entities/ShortLinkExpirationTests.cs` and `tests/Application.UnitTests/Validators/ExpirationValidationTests.cs`
-- [ ] T039 [P] [US3] Integration tests asserting HTTP `410 Gone` on expired link access via `GET /{code}`, verifying `accessCount` is NOT incremented, and verifying `isExpired: true` in `GET /shorturl-api/links/{code}/stats` in `tests/Api.IntegrationTests/Endpoints/ExpiredLinkEndpointTests.cs`
+- [X] T038 [P] [US3] Unit tests for expiration domain logic and validation asserting default 10-year expiration, end-of-day UTC normalization (`23:59:59.9999999Z`), and rejection of past dates in `tests/Domain.UnitTests/Entities/ShortLinkExpirationTests.cs` and `tests/Application.UnitTests/Validators/ExpirationValidationTests.cs`
+- [X] T039 [P] [US3] Integration tests asserting HTTP `410 Gone` on expired link access via `GET /{code}`, verifying `accessCount` is NOT incremented, and verifying `isExpired: true` in `GET /shorturl-api/links/{code}/stats` in `tests/Api.IntegrationTests/Endpoints/ExpiredLinkEndpointTests.cs`
 
 ### Implementation for User Story 3
 
-- [ ] T040 [P] [US3] Add expiration helper methods and invariant checks to `ShortLink` entity (`CalculateDefaultExpiration`, `NormalizeExpirationDate`, and `IsExpired(DateTime nowUtc)`) in `src/Domain/Entities/ShortLink.cs`
-- [ ] T041 [US3] Update `CreateShortLinkCommandValidator` to validate that `ExpiresAtUtc`, when provided, represents a future date in UTC, returning Portuguese error message when in the past in `src/Application/Validators/CreateShortLinkCommandValidator.cs`
-- [ ] T042 [US3] Update `CreateShortLinkCommandHandler` to set `ExpiresAtUtc = CreatedAtUtc.AddYears(10)` when omitted, or normalize the date to `23:59:59.9999999Z` when specified in `src/Application/ShortLinks/Commands/CreateShortLink/CreateShortLinkCommandHandler.cs`
-- [ ] T043 [US3] Update `ResolveShortLinkCommandHandler` to check `link.IsExpired(DateTime.UtcNow)` and throw `ShortLinkExpiredException` (mapped to 410 Gone) prior to redirecting or incrementing `AccessCount`, and ensure `GetShortLinkStatsQueryHandler` returns `isExpired: true` in `src/Application/ShortLinks/Commands/ResolveShortLink/ResolveShortLinkCommandHandler.cs` and `src/Application/ShortLinks/Queries/GetShortLinkStats/GetShortLinkStatsQueryHandler.cs`
+- [X] T040 [P] [US3] Add expiration helper methods and invariant checks to `ShortLink` entity (`CalculateDefaultExpiration`, `NormalizeExpirationDate`, and `IsExpired(DateTime nowUtc)`) in `src/Domain/Entities/ShortLink.cs`
+- [X] T041 [US3] Update `CreateShortLinkCommandValidator` to validate that `ExpiresAtUtc`, when provided, represents a future date in UTC, returning Portuguese error message when in the past in `src/Application/Validators/CreateShortLinkCommandValidator.cs`
+- [X] T042 [US3] Update `CreateShortLinkCommandHandler` to set `ExpiresAtUtc = CreatedAtUtc.AddYears(10)` when omitted, or normalize the date to `23:59:59.9999999Z` when specified in `src/Application/ShortLinks/Commands/CreateShortLink/CreateShortLinkCommandHandler.cs`
+- [X] T043 [US3] Update `ResolveShortLinkCommandHandler` to check `link.IsExpired(DateTime.UtcNow)` and throw `ShortLinkExpiredException` (mapped to 410 Gone) prior to redirecting or incrementing `AccessCount`, and ensure `GetShortLinkStatsQueryHandler` returns `isExpired: true` in `src/Application/ShortLinks/Commands/ResolveShortLink/ResolveShortLinkCommandHandler.cs` and `src/Application/ShortLinks/Queries/GetShortLinkStats/GetShortLinkStatsQueryHandler.cs`
 
 **Checkpoint**: All user stories (US1, US2, US3) are fully functional and independently testable.
 

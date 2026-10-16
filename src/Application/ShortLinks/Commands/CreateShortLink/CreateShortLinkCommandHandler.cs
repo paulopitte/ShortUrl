@@ -21,8 +21,8 @@ public sealed class CreateShortLinkCommandHandler(
     {
         var nowUtc = DateTime.UtcNow;
         var expiresAtUtc = request.ExpiresAtUtc.HasValue
-            ? NormalizeToEndOfDayUtc(request.ExpiresAtUtc.Value)
-            : nowUtc.AddYears(10);
+            ? ShortLink.NormalizeExpirationDate(request.ExpiresAtUtc.Value)
+            : ShortLink.CalculateDefaultExpiration(nowUtc);
 
         var entity = new ShortLink
         {
@@ -49,19 +49,6 @@ public sealed class CreateShortLinkCommandHandler(
             entity.TargetUrl,
             entity.CreatedAtUtc,
             entity.ExpiresAtUtc);
-    }
-
-    private static DateTime NormalizeToEndOfDayUtc(DateTime dateTime)
-    {
-        var utc = dateTime.Kind switch
-        {
-            DateTimeKind.Utc => dateTime,
-            DateTimeKind.Local => dateTime.ToUniversalTime(),
-            _ => DateTime.SpecifyKind(dateTime, DateTimeKind.Utc)
-        };
-
-        return new DateTime(utc.Year, utc.Month, utc.Day, 23, 59, 59, DateTimeKind.Utc)
-            .AddTicks(9_999_999);
     }
 }
 

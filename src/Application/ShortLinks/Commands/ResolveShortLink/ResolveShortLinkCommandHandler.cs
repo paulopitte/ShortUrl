@@ -26,7 +26,7 @@ public sealed class ResolveShortLinkCommandHandler(
         }
 
         var nowUtc = DateTime.UtcNow;
-        if (nowUtc > shortLink.ExpiresAtUtc)
+        if (shortLink.IsExpired(nowUtc))
         {
             throw new ShortLinkExpiredException(request.Code);
         }
