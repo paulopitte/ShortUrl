@@ -1,7 +1,16 @@
+using FluentValidation;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Serilog;
+using ShortUrl.Api.Endpoints;
+using ShortUrl.Api.Middleware;
+using ShortUrl.Application.Common.Behaviors;
+using ShortUrl.Application.Common.Interfaces;
 using ShortUrl.Infrastructure.Configuration;
+using ShortUrl.Infrastructure.Data;
+using ShortUrl.Infrastructure.Services;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -23,6 +32,32 @@ try
     builder.Services.Configure<ShortUrlOptions>(
         builder.Configuration.GetSection(ShortUrlOptions.SectionName));
 
+    // Persistência SQLite via EF Core com modo WAL
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+        ?? "Data Source=shorturl.db;Cache=Shared";
+
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    {
+        options.UseSqlite(connectionString);
+        options.AddInterceptors(SqliteWalConnectionInterceptor.Instance);
+    });
+
+    builder.Services.AddScoped<IApplicationDbContext>(provider =>
+        provider.GetRequiredService<ApplicationDbContext>());
+
+    // Serviço de geração/ofuscação Base62 de 7 caracteres
+    builder.Services.AddSingleton<IShortCodeGenerator, Base62CodeGenerator>();
+
+    // CQRS (MediatR), Pipeline Behaviors e Validadores FluentValidation
+    var applicationAssembly = typeof(IApplicationDbContext).Assembly;
+    builder.Services.AddValidatorsFromAssembly(applicationAssembly);
+    builder.Services.AddMediatR(cfg =>
+    {
+        cfg.RegisterServicesFromAssembly(applicationAssembly);
+        cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceLoggingBehavior<,>));
+        cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+    });
+
     // Fundação de observabilidade com OpenTelemetry (Métricas e Tracing)
     builder.Services.AddOpenTelemetry()
         .WithTracing(tracing =>
@@ -36,7 +71,9 @@ try
 
     var app = builder.Build();
 
+    app.UseMiddleware<CorrelationIdMiddleware>();
     app.UseSerilogRequestLogging();
+    app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
     app.MapGet("/", () => Results.Ok(new
     {
@@ -44,6 +81,8 @@ try
         version = "1.0.0",
         status = "Healthy"
     }));
+
+    app.MapEndpointGroups();
 
     app.Run();
 }

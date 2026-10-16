@@ -26,10 +26,10 @@
 
 **Purpose**: Project initialization, directory structure, solution setup, and fundamental framework dependencies.
 
-- [ ] T001 Create .NET 10 solution `ShortUrl.sln` and Clean Architecture project structure with projects `src/Domain`, `src/Application`, `src/Infrastructure`, `src/Api`, `tests/Domain.UnitTests`, `tests/Application.UnitTests`, and `tests/Api.IntegrationTests` per `plan.md`
-- [ ] T002 [P] Configure project dependencies, C# 13 nullable references, and NuGet packages (`MediatR`, `FluentValidation.DependencyInjectionExtensions`, `Microsoft.EntityFrameworkCore.Sqlite`, `Microsoft.EntityFrameworkCore.Design`, `Serilog.AspNetCore`, `OpenTelemetry.Extensions.Hosting`) in `Directory.Build.props` and project `.csproj` files
-- [ ] T003 [P] Configure Serilog structured logging and OpenTelemetry tracing/metrics foundation in `src/Api/Program.cs`
-- [ ] T004 [P] Configure options binding for `ShortUrlOptions` (including `HashSalt` and connection string `ConnectionStrings:DefaultConnection`) supporting user-secrets and environment variables in `src/Infrastructure/Configuration/ShortUrlOptions.cs` and `src/Api/appsettings.json`
+- [X] T001 Create .NET 10 solution `ShortUrl.sln` and Clean Architecture project structure with projects `src/Domain`, `src/Application`, `src/Infrastructure`, `src/Api`, `tests/Domain.UnitTests`, `tests/Application.UnitTests`, and `tests/Api.IntegrationTests` per `plan.md`
+- [X] T002 [P] Configure project dependencies, C# 13 nullable references, and NuGet packages (`MediatR`, `FluentValidation.DependencyInjectionExtensions`, `Microsoft.EntityFrameworkCore.Sqlite`, `Microsoft.EntityFrameworkCore.Design`, `Serilog.AspNetCore`, `OpenTelemetry.Extensions.Hosting`) in `Directory.Build.props` and project `.csproj` files
+- [X] T003 [P] Configure Serilog structured logging and OpenTelemetry tracing/metrics foundation in `src/Api/Program.cs`
+- [X] T004 [P] Configure options binding for `ShortUrlOptions` (including `HashSalt` and connection string `ConnectionStrings:DefaultConnection`) supporting user-secrets and environment variables in `src/Infrastructure/Configuration/ShortUrlOptions.cs` and `src/Api/appsettings.json`
 
 ---
 
@@ -39,17 +39,17 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T005 [P] Define `IApplicationDbContext` interface with `DbSet<ShortLink> ShortLinks` and `Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)` in `src/Application/Common/Interfaces/IApplicationDbContext.cs`
-- [ ] T006 [P] Define `IShortCodeGenerator` interface with methods `string Encode(long id)` and `long Decode(string code)` in `src/Application/Common/Interfaces/IShortCodeGenerator.cs`
-- [ ] T007 [P] Implement MediatR `ValidationBehavior<TRequest, TResponse>` pipeline behavior to execute FluentValidation validators before handler invocation in `src/Application/Common/Behaviors/ValidationBehavior.cs`
-- [ ] T008 [P] Implement MediatR `PerformanceLoggingBehavior<TRequest, TResponse>` pipeline behavior with Serilog contextual logging and threshold warnings in `src/Application/Common/Behaviors/PerformanceLoggingBehavior.cs`
-- [ ] T009 [P] Implement `CorrelationIdMiddleware` to extract or generate `X-Correlation-Id` header and enrich Serilog `LogContext` in `src/Api/Middleware/CorrelationIdMiddleware.cs`
-- [ ] T010 Implement `GlobalExceptionHandlerMiddleware` returning standard RFC 9457 / RFC 7807 `application/problem+json` (`ProblemDetails`) with Portuguese client messages for `ShortLinkNotFoundException` (404), `ShortLinkExpiredException` (410), and `ValidationException` (400) in `src/Api/Middleware/GlobalExceptionHandlerMiddleware.cs`
-- [ ] T011 [P] Create `EndpointGroupBase` abstract base class for API Minimal API routing groups mapped under `/shorturl-api/{GroupName}` in `src/Api/Endpoints/EndpointGroupBase.cs`
-- [ ] T012 Configure EF Core `ApplicationDbContext` implementing `IApplicationDbContext` with SQLite `PRAGMA journal_mode = WAL;` and `PRAGMA synchronous = NORMAL;` in `src/Infrastructure/Data/ApplicationDbContext.cs`
-- [ ] T013 Implement `Base62CodeGenerator` implementing `IShortCodeGenerator` using complete 62-character alphabet (`0-9`, `A-Z`, `a-z`), deterministic secret salt permutation (Hashids style), and bijective mapping over 64-bit integer `Id` producing fixed 7-character codes (`^[0-9A-Za-z]{7}$`) in `src/Infrastructure/Services/Base62CodeGenerator.cs`
-- [ ] T014 Create unit tests for `Base62CodeGenerator` validating bijection, fixed 7-character Base62 alphabet (`[0-9A-Za-z]{7}`), salt determinism, and zero collision guarantees across numeric ranges in `tests/Application.UnitTests/Services/Base62CodeGeneratorTests.cs`
-- [ ] T015 Create base `CustomWebApplicationFactory` for integration tests with test SQLite database and schema initialization in `tests/Api.IntegrationTests/CustomWebApplicationFactory.cs`
+- [X] T005 [P] Define `IApplicationDbContext` interface with `DbSet<ShortLink> ShortLinks` and `Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)` in `src/Application/Common/Interfaces/IApplicationDbContext.cs`
+- [X] T006 [P] Define `IShortCodeGenerator` interface with methods `string Encode(long id)` and `long Decode(string code)` in `src/Application/Common/Interfaces/IShortCodeGenerator.cs`
+- [X] T007 [P] Implement MediatR `ValidationBehavior<TRequest, TResponse>` pipeline behavior to execute FluentValidation validators before handler invocation in `src/Application/Common/Behaviors/ValidationBehavior.cs`
+- [X] T008 [P] Implement MediatR `PerformanceLoggingBehavior<TRequest, TResponse>` pipeline behavior with Serilog contextual logging and threshold warnings in `src/Application/Common/Behaviors/PerformanceLoggingBehavior.cs`
+- [X] T009 [P] Implement `CorrelationIdMiddleware` to extract or generate `X-Correlation-Id` header and enrich Serilog `LogContext` in `src/Api/Middleware/CorrelationIdMiddleware.cs`
+- [X] T010 Implement `GlobalExceptionHandlerMiddleware` returning standard RFC 9457 / RFC 7807 `application/problem+json` (`ProblemDetails`) with Portuguese client messages for `ShortLinkNotFoundException` (404), `ShortLinkExpiredException` (410), and `ValidationException` (400) in `src/Api/Middleware/GlobalExceptionHandlerMiddleware.cs`
+- [X] T011 [P] Create `EndpointGroupBase` abstract base class for API Minimal API routing groups mapped under `/shorturl-api/{GroupName}` in `src/Api/Endpoints/EndpointGroupBase.cs`
+- [X] T012 Configure EF Core `ApplicationDbContext` implementing `IApplicationDbContext` with SQLite `PRAGMA journal_mode = WAL;` and `PRAGMA synchronous = NORMAL;` in `src/Infrastructure/Data/ApplicationDbContext.cs`
+- [X] T013 Implement `Base62CodeGenerator` implementing `IShortCodeGenerator` using complete 62-character alphabet (`0-9`, `A-Z`, `a-z`), deterministic secret salt permutation (Hashids style), and bijective mapping over 64-bit integer `Id` producing fixed 7-character codes (`^[0-9A-Za-z]{7}$`) in `src/Infrastructure/Services/Base62CodeGenerator.cs`
+- [X] T014 Create unit tests for `Base62CodeGenerator` validating bijection, fixed 7-character Base62 alphabet (`[0-9A-Za-z]{7}`), salt determinism, and zero collision guarantees across numeric ranges in `tests/Application.UnitTests/Services/Base62CodeGeneratorTests.cs`
+- [X] T015 Create base `CustomWebApplicationFactory` for integration tests with test SQLite database and schema initialization in `tests/Api.IntegrationTests/CustomWebApplicationFactory.cs`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin.
 
