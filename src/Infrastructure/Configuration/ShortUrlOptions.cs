@@ -15,9 +15,10 @@ public class ShortUrlOptions
     public string HashSalt { get; set; } = string.Empty;
 
     /// <summary>
-    /// URL base pública da aplicação para composição do link curto completo (ex: http://localhost:5000).
+    /// URL base pública opcional da aplicação para composição do link curto completo (ex: https://sho.rt).
+    /// Caso omitido ou vazio, a URL base é inferida dinamicamente a partir do esquema e host da requisição HTTP atual.
     /// </summary>
-    public string BaseUrl { get; set; } = "http://localhost:5000";
+    public string? BaseUrl { get; set; }
 
     /// <summary>
     /// Prazo padrão de expiração em anos quando nenhuma data for especificada na criação. Padrão: 10 anos.
