@@ -137,10 +137,10 @@
 
 **Purpose**: Documentation, OpenAPI specification, database health checks, and quickstart end-to-end verification.
 
-- [ ] T044 [P] Add C# XML documentation comments (`<summary>`, `<param>`, `<response>`) across all endpoints in `src/Api/Endpoints/`, commands, queries, and DTOs in `src/Application/` for complete OpenAPI metadata generation per constitution
-- [ ] T045 Configure OpenAPI / NSwag Swagger UI metadata, title, version, and endpoint descriptions in `src/Api/Program.cs`
-- [ ] T046 [P] Add ASP.NET Core Health Checks endpoint (`/health`, `/ready`) validating SQLite database connectivity and disk write availability in `src/Api/Program.cs`
-- [ ] T047 Execute and validate all 5 scenarios from `quickstart.md` (`curl` commands for URL creation, 302 redirect, public stats, URL validation error, expired link 410, and restart persistence) against the running application in `specs/001-url-shortener/quickstart.md`
+- [X] T044 [P] Add C# XML documentation comments (`<summary>`, `<param>`, `<response>`) across all endpoints in `src/Api/Endpoints/`, commands, queries, and DTOs in `src/Application/` for complete OpenAPI metadata generation per constitution
+- [X] T045 Configure OpenAPI / NSwag Swagger UI metadata, title, version, and endpoint descriptions in `src/Api/Program.cs`
+- [X] T046 [P] Add ASP.NET Core Health Checks endpoint (`/health`, `/ready`) validating SQLite database connectivity and disk write availability in `src/Api/Program.cs`
+- [X] T047 Execute and validate all 5 scenarios from `quickstart.md` (`curl` commands for URL creation, 302 redirect, public stats, URL validation error, expired link 410, and restart persistence) against the running application in `specs/001-url-shortener/quickstart.md`
 
 ---
 

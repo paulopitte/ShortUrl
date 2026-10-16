@@ -9,9 +9,16 @@ namespace ShortUrl.Application.ShortLinks.Commands.ResolveShortLink;
 /// Handler responsável por localizar um link curto pelo código, validar sua vigência, incrementar atomicamente
 /// o contador de acessos (<c>AccessCount</c>) no banco de dados e retornar sua URL de destino original.
 /// </summary>
+/// <param name="dbContext">Contexto de banco de dados da aplicação para consulta e atualização atômica.</param>
 public sealed class ResolveShortLinkCommandHandler(
     IApplicationDbContext dbContext) : IRequestHandler<ResolveShortLinkCommand, string>
 {
+    /// <summary>
+    /// Processa a resolução do link curto, verifica sua vigência e incrementa atomicamente seu contador de acessos.
+    /// </summary>
+    /// <param name="request">Comando contendo o código curto a ser resolvido.</param>
+    /// <param name="cancellationToken">Token de cancelamento da operação assíncrona.</param>
+    /// <returns>URL original de destino associada ao código informado.</returns>
     public async Task<string> Handle(
         ResolveShortLinkCommand request,
         CancellationToken cancellationToken)
