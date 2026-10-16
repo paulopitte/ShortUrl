@@ -35,7 +35,7 @@ public sealed class SqliteWalConnectionInterceptor : DbConnectionInterceptor
 {
     public static readonly SqliteWalConnectionInterceptor Instance = new();
 
-    private const string WalPragmaCommandText = "PRAGMA journal_mode = WAL; PRAGMA synchronous = NORMAL;";
+    private const string WalPragmaCommandText = "PRAGMA journal_mode = WAL; PRAGMA synchronous = NORMAL; PRAGMA busy_timeout = 5000;";
 
     public override void ConnectionOpened(DbConnection connection, ConnectionEndEventData eventData)
     {

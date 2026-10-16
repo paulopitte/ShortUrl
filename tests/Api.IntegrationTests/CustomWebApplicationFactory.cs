@@ -29,7 +29,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             services.RemoveAll<ApplicationDbContext>();
             services.RemoveAll<IApplicationDbContext>();
 
-            var connectionString = $"Data Source={_databasePath};Cache=Shared;Mode=ReadWriteCreate;";
+            var connectionString = $"Data Source={_databasePath};Mode=ReadWriteCreate;Default Timeout=30;";
 
             services.Configure<ShortUrlOptions>(options =>
             {

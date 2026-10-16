@@ -95,17 +95,17 @@
 
 ### Tests for User Story 2 ⚠️
 
-- [ ] T030 [P] [US2] Unit tests for `GetShortLinkStatsQueryHandler` and `GetShortLinkStatsQueryValidator` validating stats retrieval and non-existent code handling in `tests/Application.UnitTests/ShortLinks/GetShortLinkStatsQueryHandlerTests.cs`
-- [ ] T031 [P] [US2] Concurrency unit and integration tests executing simultaneous `ResolveShortLinkCommand` / `GET /{code}` calls against SQLite asserting zero lost updates on `AccessCount` in `tests/Application.UnitTests/ShortLinks/AtomicIncrementAccessCountTests.cs`
-- [ ] T032 [P] [US2] Integration tests for `GET /shorturl-api/links/{code}/stats` asserting public access without authentication returning `200 OK` with JSON payload (`code`, `targetUrl`, `createdAtUtc`, `expiresAtUtc`, `isExpired`, `accessCount`) and `404 Not Found` for unknown codes in `tests/Api.IntegrationTests/Endpoints/GetShortLinkStatsEndpointTests.cs`
+- [X] T030 [P] [US2] Unit tests for `GetShortLinkStatsQueryHandler` and `GetShortLinkStatsQueryValidator` validating stats retrieval and non-existent code handling in `tests/Application.UnitTests/ShortLinks/GetShortLinkStatsQueryHandlerTests.cs`
+- [X] T031 [P] [US2] Concurrency unit and integration tests executing simultaneous `ResolveShortLinkCommand` / `GET /{code}` calls against SQLite asserting zero lost updates on `AccessCount` in `tests/Application.UnitTests/ShortLinks/AtomicIncrementAccessCountTests.cs`
+- [X] T032 [P] [US2] Integration tests for `GET /shorturl-api/links/{code}/stats` asserting public access without authentication returning `200 OK` with JSON payload (`code`, `targetUrl`, `createdAtUtc`, `expiresAtUtc`, `isExpired`, `accessCount`) and `404 Not Found` for unknown codes in `tests/Api.IntegrationTests/Endpoints/GetShortLinkStatsEndpointTests.cs`
 
 ### Implementation for User Story 2
 
-- [ ] T033 [P] [US2] Create DTO `ShortLinkStatsDto` with properties `Code`, `TargetUrl`, `CreatedAtUtc`, `ExpiresAtUtc`, `IsExpired`, and `AccessCount` in `src/Application/ShortLinks/DTOs/ShortLinkStatsDto.cs`
-- [ ] T034 [P] [US2] Implement `GetShortLinkStatsQueryValidator` validating `{code}` is not empty and matches Base62 format `^[0-9A-Za-z]{1,7}$` with Portuguese error messages in `src/Application/Validators/GetShortLinkStatsQueryValidator.cs`
-- [ ] T035 [US2] Update `ResolveShortLinkCommandHandler` to execute atomic database increment `ExecuteUpdateAsync(s => s.SetProperty(b => b.AccessCount, b => b.AccessCount + 1))` conditioned to active link (`ExpiresAtUtc >= nowUtc`) in `src/Application/ShortLinks/Commands/ResolveShortLink/ResolveShortLinkCommandHandler.cs`
-- [ ] T036 [US2] Implement `GetShortLinkStatsQuery` and `GetShortLinkStatsQueryHandler` querying `IApplicationDbContext.ShortLinks` as read-only (`AsNoTracking`) and mapping to `ShortLinkStatsDto` in `src/Application/ShortLinks/Queries/GetShortLinkStats/GetShortLinkStatsQuery.cs` and `src/Application/ShortLinks/Queries/GetShortLinkStats/GetShortLinkStatsQueryHandler.cs`
-- [ ] T037 [US2] Expose `GET /shorturl-api/links/{code}/stats` endpoint in `ShortLinksEndpoints` dispatching `GetShortLinkStatsQuery` and returning `200 OK` in `src/Api/Endpoints/ShortLinksEndpoints.cs`
+- [X] T033 [P] [US2] Create DTO `ShortLinkStatsDto` with properties `Code`, `TargetUrl`, `CreatedAtUtc`, `ExpiresAtUtc`, `IsExpired`, and `AccessCount` in `src/Application/ShortLinks/DTOs/ShortLinkStatsDto.cs`
+- [X] T034 [P] [US2] Implement `GetShortLinkStatsQueryValidator` validating `{code}` is not empty and matches Base62 format `^[0-9A-Za-z]{1,7}$` with Portuguese error messages in `src/Application/Validators/GetShortLinkStatsQueryValidator.cs`
+- [X] T035 [US2] Update `ResolveShortLinkCommandHandler` to execute atomic database increment `ExecuteUpdateAsync(s => s.SetProperty(b => b.AccessCount, b => b.AccessCount + 1))` conditioned to active link (`ExpiresAtUtc >= nowUtc`) in `src/Application/ShortLinks/Commands/ResolveShortLink/ResolveShortLinkCommandHandler.cs`
+- [X] T036 [US2] Implement `GetShortLinkStatsQuery` and `GetShortLinkStatsQueryHandler` querying `IApplicationDbContext.ShortLinks` as read-only (`AsNoTracking`) and mapping to `ShortLinkStatsDto` in `src/Application/ShortLinks/Queries/GetShortLinkStats/GetShortLinkStatsQuery.cs` and `src/Application/ShortLinks/Queries/GetShortLinkStats/GetShortLinkStatsQueryHandler.cs`
+- [X] T037 [US2] Expose `GET /shorturl-api/links/{code}/stats` endpoint in `ShortLinksEndpoints` dispatching `GetShortLinkStatsQuery` and returning `200 OK` in `src/Api/Endpoints/ShortLinksEndpoints.cs`
 
 **Checkpoint**: User Stories 1 and 2 are fully functional and independently testable.
 
