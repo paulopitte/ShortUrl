@@ -1,0 +1,36 @@
+## Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+## Visual Studio / VS Code / Rider
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+
+## Testing & Coverage
+TestResults/
+coverage/
+*.cobertura.xml
+
+## Database / SQLite
+*.db
+*.db-shm
+*.db-wal
+
+## OS files
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+
+## User secrets / local settings
+appsettings*.local.json
+*.local.json
+secrets.json
+
